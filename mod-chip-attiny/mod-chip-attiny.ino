@@ -3,7 +3,7 @@ Arduboy ModChip loader v1.02 (ATtiny version) Dec 2019 -Apr 2020 by Mr.Blinky
 
 Firmware for Attiny 45/85 to update Arduboy bootloader
 
-Licenced under MIT
+Licenced under CC0
 
 ARDUBOY    |    Attiny wiring       | ARDUBOY            
                 ____     ____               

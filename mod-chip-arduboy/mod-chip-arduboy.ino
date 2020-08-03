@@ -3,7 +3,7 @@ Arduboy ModChip loader v1.03 (Arduboy part) Dec 2019 -Apr 2020 by Mr.Blinky
 
 Arduboy program to program the modchips attiny firmware
 
-Licenced under MIT
+Licenced under CC0
 
 
  ARDUBOY    |   attiny wiring       | ARDUBOY
