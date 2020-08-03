@@ -1,0 +1,19 @@
+# How to (re)build the mod-chip activator sketch
+
+* Convert latest arduboy3k-bootloader-sda.hex file into a header file using hex-to-header.py script
+
+* Place created arduboy3k-bootloader-sda.h in mod-chip-attiny folder
+
+* open mod-chip-attiny.ino with IDE
+
+* select board ATTINY25/45/85 with options ATTINY45 and 1MHZ
+
+* use sketch menu option export to compiled binary
+
+* convert mod-chip-attiny.ino.tiny8.hex file into header file using hex-to-header.py
+
+* Place created mod-chip-attiny.ino.tiny8.h in mod-chip-arduboy folder
+
+* open mod-chip-arduboy.ino IDE
+
+* upload normally using IDE or export compiled binary for use with custom uploader
