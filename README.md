@@ -10,9 +10,9 @@ play on the go without the need connect to a PC.
 ## Arduboy FX Activator
 
 The Arduboy FX Activator consists of an Arduboy program(sketch) and a Python GUI script to 
-upload this program. The Arduboy program will install/update the firmware into the Arduboy FX
-mod-chip MCU. With the firmware installed, this program is is also used to update Arduboy's 
-bootloader.
+upload the Arduboy program. This program is used to install/update the firmware into the Arduboy FX
+mod-chip MCU and has some diagnostic options. With the firmware installed, this program is also
+used to update Arduboy's bootloader.
 
 The python GUI script is graphical tool to easily upload the the Arduboy program to Arduboy
 and also upload a flash image containing all the games to the flash chip. 
