@@ -1,5 +1,5 @@
 /*******************************************************************************
-Arduboy ModChip loader v1.03 (Arduboy part) Dec 2019 -Apr 2020 by Mr.Blinky
+Arduboy ModChip loader v1.04 (Arduboy part) Dec 2019 -Aug 2020 by Mr.Blinky
 
 Arduboy program to program the modchips attiny firmware
 
@@ -35,8 +35,11 @@ PD1 is FX_CS an active low selects the flash chip. PB3 is configured
 #include "ArduboyFX.h"
 #include "bitmaps.h"
 #include "isp.h"
-#include "mod-chip-attiny.ino.tiny8.h"
-#define  FIRMWARE mod_chip_attiny_ino_tiny8
+#include "mod-chip-attiny.ino.tiny8.menu.h"
+#include "mod-chip-attiny.ino.tiny8.game.h"
+
+#define  FIRMWARE_MENU mod_chip_attiny_ino_tiny8_menu
+#define  FIRMWARE_GAME mod_chip_attiny_ino_tiny8_game
 
 //port pin connected to FX flash chip select
 #define FX_CS_PORT PORTD
@@ -67,8 +70,8 @@ constexpr uint8_t smRight = 2;
 Arduboy2 arduboy;
 uint8_t menuState;
 uint8_t menuOption;
-
 uint8_t flashingState;
+bool powerUpGame;
 
 uint8_t modchipCrcState;
 uint16_t modchipCrc;
@@ -154,7 +157,7 @@ void flashModchip()
       if (ISP_enable())
       {
         ISP_eraseChip();
-        ISP_writeProgramFlash(FIRMWARE);
+        ISP_writeProgramFlash(powerUpGame ? FIRMWARE_GAME : FIRMWARE_MENU);
         ISP_disable();
         modchipCrcState = 0;
         arduboy.setCursor(10,28);
@@ -168,7 +171,7 @@ void flashModchip()
       {
         if (ISP_enable())
         {
-          if (ISP_verifyProgramFlash(FIRMWARE)) flashingState++;
+          if (ISP_verifyProgramFlash(powerUpGame ? FIRMWARE_GAME : FIRMWARE_MENU)) flashingState++;
           ISP_disable();
         }
       ++flashingState;
@@ -250,6 +253,8 @@ void menuScreen()
 {
   arduboy.drawBitmap(0, 0, menuScreenBitmap, menuScreenBitmapWidth, menuScreenBitmapHeight, WHITE);
   arduboy.drawBitmap(16, 11 * menuOption, selectBitmap, selectBitmapWidth, selectBitmapHeight, WHITE);
+  if (powerUpGame) arduboy.drawBitmap(94,14, gameBitmap, gameBitmapWidth, gameBitmapHeight, WHITE);
+  else arduboy.drawBitmap(94,14, menuBitmap, menuBitmapWidth, menuBitmapHeight, WHITE);
 
   if (arduboy.justPressed(DOWN_BUTTON)) 
     menuOption = (menuOption + 1) & 3;
@@ -258,8 +263,9 @@ void menuScreen()
   if (arduboy.justPressed(A_BUTTON))
   {
      if (menuOption == 0)      menuState = msArduboy;
-     else if (menuOption == 1) menuState = msFlashModchip;
-     else if (menuOption == 2) menuState = msFlashBootloader;
+     else if (menuOption == 1) powerUpGame = !powerUpGame;
+     else if (menuOption == 2) menuState = msFlashModchip;
+     else if (menuOption == 3) menuState = msFlashBootloader;
   }
   if (arduboy.justPressed(B_BUTTON)) menuState = msMain;
 }
@@ -332,28 +338,30 @@ void arduboyInfo()
   arduboy.print(F("ARDUBOY DETAILS"));
   arduboy.drawBitmap(0,43, leftRightBitmap, leftRightBitmapWidth, leftRightBitmapHeight, WHITE);
   arduboy.drawBitmap(99,48, backButtonBitmap, backButtonBitmapWidth, backButtonBitmapHeight, WHITE);
-  
+/* 
+  Note: poweron with menu/game no longer selectable by EEPROM
+ 
   arduboy.drawBitmap(2,9, buttonBitmap, buttonBitmapWidth, buttonBitmapHeight, WHITE);
   arduboy.setCursor(16,11);
   arduboy.print(F("Power-on menu:"));
   uint8_t bootflags = EEPROM.read(EEPROM_BOOT_FLAGS);
   if (bootflags & BOOT_FLAG_POWERON_MENU_MASK) arduboy.print(F("ON"));
   else arduboy.print(F("OFF"));
-  
-  arduboy.setCursor(16,19);
+*/  
+  arduboy.setCursor(16,19-8);
   arduboy.print(F("Lfuse:"));
   printHexByte(readFuses(0));
   arduboy.print(F(" Efuse:"));
   printHexByte(readFuses(2));
   
-  arduboy.setCursor(16,27);
+  arduboy.setCursor(16,27-5);
   uint8_t hfuse = readFuses(3);
   arduboy.print(F("Hfuse:"));
   printHexByte(hfuse);
   arduboy.print(F(" Lock: "));
   printHexByte(readFuses(1));
   
-  arduboy.setCursor(16,35);
+  arduboy.setCursor(16,35-2);
   arduboy.print(F("BootCRC:"));
   uint8_t* bootldr = 0x7000;                    // 4K bootloader
   if ((hfuse & 0x06) == 0x02) bootldr = 0x7400; // 3K bootloader
@@ -378,8 +386,8 @@ void arduboyInfo()
     arduboy.print(char(minor));
   }
   
-  if (arduboy.justPressed(A_BUTTON))          EEPROM.update(EEPROM_BOOT_FLAGS,bootflags ^ 0x80);
-  else if (arduboy.justPressed(LEFT_BUTTON))  menuState = msFlashchip;
+  //if (arduboy.justPressed(A_BUTTON))          EEPROM.update(EEPROM_BOOT_FLAGS,bootflags ^ 0x80);
+  if      (arduboy.justPressed(LEFT_BUTTON))  menuState = msFlashchip;
   else if (arduboy.justPressed(RIGHT_BUTTON)) menuState = msModchip;
   else if (arduboy.justPressed(B_BUTTON))     menuState = msMenu;
 }

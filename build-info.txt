@@ -1,19 +1,34 @@
 # How to (re)build the mod-chip activator sketch
 
-* Convert latest arduboy3k-bootloader-sda.hex file into a header file using hex-to-header.py script
+* Convert latest arduboy3k-bootloader-menu-sda.hex and 
+  arduboy3k-bootloader-game-sda.hex files into a C header file using
+  hex-to-header.py Python script
 
-* Place created arduboy3k-bootloader-sda.h in mod-chip-attiny folder
+* Place both created arduboy3k-bootloader-menu-sda.h and 
+  arduboy3k-bootloader-game-sda.h header files in the in the 
+  mod-chip-attiny folder
 
-* open mod-chip-attiny.ino with IDE
+* open mod-chip-attiny.ino with Arduino IDE (with Attiny support installed)
 
 * select board ATTINY25/45/85 with options ATTINY45 and 1MHZ
 
-* use sketch menu option export to compiled binary
+* make sure the BOOTLOADER_DATA define in line 38 of the .ino file is
+  unremarked and the one on line 39 is remarked. Then use sketch menu
+  option 'export to compiled binary' and rename the created 
+  mod-chip-attiny.ino.tiny8.hex to mod-chip-attiny.ino.tiny8.menu.hex 
+  
+* Do the same as in previous step but now remark line 38 and
+  unremark line 39. Rename the mod-chip-attiny.ino.tiny8.hex to 
+  mod-chip-attiny.ino.tiny8.menu.hex 
 
-* convert mod-chip-attiny.ino.tiny8.hex file into header file using hex-to-header.py
+* convert both hex files file into C header files using the 
+  hex-to-header.py Python script.
 
-* Place created mod-chip-attiny.ino.tiny8.h in mod-chip-arduboy folder
+* Place both created mod-chip-attiny.ino.tiny8.menu.h and 
+  mod-chip-attiny.ino.tiny8.game.h in mod-chip-arduboy folder.
 
-* open mod-chip-arduboy.ino IDE
+* open mod-chip-arduboy.ino in Arduino IDE
 
-* upload normally using IDE or export compiled binary for use with custom uploader
+* upload the program normally using Arduino IDE or use the 
+  'export compiled binary' option for use with a custom uploader.
+  In the last case rename the hex file to arduboy-activator.hex.
