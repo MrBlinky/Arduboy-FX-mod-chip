@@ -20,10 +20,11 @@ and also upload a flash image containing all the games to the flash chip.
 ## Portable Activator
 
 The folder **portable-activator** contains the GUI python script file and Arduboy .hex file.
-It also contains an all in-one zip file targeted for Windows users that containing Python 3.
+It also contains an all in-one zip file targeted for Windows users that contains a stand alone
+version of Python 3 to run the script.
 
-Windows users can unpack the zip file and run the **run-fx-activator-windows.bat** to run the tool.
-Linux and OSX users can run the **fx-activator.py** using Python launcher.
+Windows users can unpack the zip file and double click the **run-fx-activator-windows.bat** to run
+the tool.Linux and OSX users can run the **fx-activator.py** using Python launcher.
 For Linux and OSX users: Make sure PySerial module is installed otherwise the tool wont work.
 
 ![screenshot](https://github.com/MrBlinky/Arduboy-FX-mod-chip/raw/master/portable-activator/screenshot-running.png)
