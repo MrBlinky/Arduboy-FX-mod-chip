@@ -1,5 +1,5 @@
 /*******************************************************************************
-Arduboy ModChip loader v1.02 (ATtiny version) Dec 2019 -Apr 2020 by Mr.Blinky
+Arduboy ModChip loader v1.03 (ATtiny version) Dec 2019 -Aug 2020 by Mr.Blinky
 
 Firmware for Attiny 45/85 to update Arduboy bootloader
 
@@ -31,10 +31,13 @@ PD1 is FX_CS an active low selects the flash chip. PB3 is configured
 *******************************************************************************/
 #include <avr/sleep.h>
 #include "isp.h"
-#include "arduboy3k-bootloader-sda.h"
+#include "arduboy3k-bootloader-menu-sda.h"
+#include "arduboy3k-bootloader-game-sda.h"
 
 // Arduboy bootloader code and fusesettings
-#define BOOTLOADER_DATA arduboy3k_bootloader_sda
+#define BOOTLOADER_DATA arduboy3k_bootloader_menu_sda
+//#define BOOTLOADER_DATA arduboy3k_bootloader_game_sda
+
 #define LOW_FUSE     0xFF
 #define HIGH_FUSE    0xD2 // bootloader size 1K word, Preserve EEPROM on chip erase
 #define EXT_FUSE     0xCB 
