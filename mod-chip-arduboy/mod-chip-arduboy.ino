@@ -1,5 +1,5 @@
 /*******************************************************************************
-Arduboy ModChip loader v1.04 (Arduboy part) Dec 2019 -Aug 2020 by Mr.Blinky
+Arduboy ModChip loader v1.2 (Arduboy part) Dec 2019 -Aug 2020 by Mr.Blinky
 
 Arduboy program to program the modchips attiny firmware
 

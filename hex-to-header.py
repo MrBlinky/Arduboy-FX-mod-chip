@@ -1,4 +1,4 @@
-print('\nHex file to C header coverter v1.01 by Mr.Blinky Jan 2020\n')
+print('\nHex file to C header coverter v1.02 by Mr.Blinky Jan-Aug 2020\n')
 
 import sys
 import time
@@ -62,17 +62,18 @@ def convert(filename):
         
 ################################################################################
 
-if len(sys.argv) != 2 :
+if len(sys.argv) < 2 :
     print('\nUsage: {} filename.hex\n'.format(os.path.basename(sys.argv[0])))
     print('Convert an Intel hex file into a C header file.')
     DelayedExit()
-    
-hexfile = os.path.abspath(sys.argv[1])
-path = os.path.dirname(hexfile)+os.sep
-if not os.path.isfile(hexfile) :
-    print('Error: hex file "{}" not found.'.format(hexfile))
-    DelayedExit()
-filename = path + os.path.basename(hexfile).replace('.hex','.h')
-convert(hexfile)
-print('Converted hex file "{}"'.format(hexfile))
-DelayedExit
+
+for filenumber in range (1,len(sys.argv)): #support multiple files
+    hexfile = os.path.abspath(sys.argv[filenumber])
+    path = os.path.dirname(hexfile)+os.sep
+    if not os.path.isfile(hexfile) :
+        print('Error: hex file "{}" not found.'.format(hexfile))
+        DelayedExit()
+    filename = path + os.path.basename(hexfile).replace('.hex','.h')
+    convert(hexfile)
+    print('Converted hex file "{}"'.format(hexfile))
+DelayedExit()
