@@ -363,11 +363,11 @@ void arduboyInfo()
   
   arduboy.setCursor(16,35-2);
   arduboy.print(F("BootCRC:"));
-  uint8_t* bootldr = 0x7000;                    // 4K bootloader
-  if ((hfuse & 0x06) == 0x02) bootldr = 0x7400; // 3K bootloader
+  uint8_t* bootldr = (uint8_t*)0x7000;                    // 4K bootloader
+  if ((hfuse & 0x06) == 0x02) bootldr = (uint8_t*)0x7400; // 3K bootloader
   uint16_t crc = 0xFFFF; 
   // calculate bootloader crc using CRC16-CCITT (with input and output reflection)
-  while (bootldr < 0x8000)
+  while (bootldr < (uint8_t*)0x8000)
   { 
     uint8_t data = pgm_read_byte(bootldr++);
     data ^= crc & 0xFF; 

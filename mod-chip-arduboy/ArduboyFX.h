@@ -1,19 +1,16 @@
 #ifndef ARDUBOYFX_H
 #define ARDUBOYFX_H
 
-#include <stddef.h>     // Required for size_t
 #include <Arduboy2.h>
-//#ifdef CART_CS_SDA      
+
+#ifdef CART_CS_RX
+  #define FX_PORT PORTD
+  #define FX_BIT PORTD2
+#else
   #define FX_PORT PORTD
   #define FX_BIT PORTD1
-  #define USE_ARDUBOY2_SPITRANSFER
-//#else
-//  #define FX_PORT PORTD
-//  #define FX_BIT PORTD2
-//  #ifdef CART_PORT
-//    #define USE_ARDUBOY2_SPITRANSFER
-//  #endif
-//#endif
+#endif
+
 
 //progam data and save data pages(set by PC manager tool)
 constexpr uint16_t FX_VECTOR_KEY_VALUE  = 0x9518;        /* RETI instruction used a magic key */

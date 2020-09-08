@@ -7,12 +7,8 @@ uint16_t FX::programSavePage; // program read and write data location in flash m
 
 uint8_t FX::writeByte(uint8_t data)
 {
- #ifdef USE_ARDUBOY2_SPITRANSFER
-  return Arduboy2Base::SPItransfer(data);
- #else
   writeByteBeforeWait(data);
   return SPDR;
- #endif
 }
 
 
