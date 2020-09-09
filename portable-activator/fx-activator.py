@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#Arduboy Uploader GUI / FX activator v1.03 by Mr.Blinky Apr.2020
+print("Arduboy Uploader GUI / FX activator v1.04 by Mr.Blinky Apr.2020\n")
 
 from tkinter import filedialog
 from tkinter import *
@@ -11,6 +11,9 @@ import time
 
 ## defaults ##
 fxActivator = "activator" in os.path.basename(sys.argv[0])
+if len(sys.argv) > 1:
+  if sys.argv[1].lower() == 'uploader' : fxActivator = False
+  elif sys.argv[1].lower() == 'activator' : fxActivator = True
 path = os.path.dirname(os.path.abspath(sys.argv[0]))+os.sep
 if fxActivator:
   title = "FX Activator"
@@ -350,7 +353,32 @@ def flashImage():
   addLog("Press UP or DOWN to select a game followed by A or B to load and play a game.")
   addLog("Press A or B on the Loader title screen to play last loaded game.")
   enableButtons()
-    
+  
+## backup EEPROM ###############################################################
+
+## restore EEPROM ##############################################################
+
+## erase EEPROM ################################################################
+
+def eraseEEPROM():
+  disableButtons()
+  progressbar['value'] = 0
+  progressbar['maximum'] = 1024
+  if not bootloaderStart(): 
+    enableButtons()
+    return  
+  addLog("\nErasing EEPROM data...")
+  for addr in range(0,1024,64):
+    bootloader.write(bytearray([ord("A"),addr >> 8,addr & 0xFF]))
+    bootloader.read(1)
+    bootloader.write(b"B\x00\x40E")
+    bootloader.write(b"\xFF" * 64)
+    bootloader.read(1)
+    progressbar['value'] = progressbar['value'] + 64
+  bootloaderExit()
+  addLog("EEPROM erase complete.")
+  enableButtons()
+ 
 ## GUI interface ###############################################################
 
 ## menu commands ##
@@ -378,6 +406,15 @@ def uploadHexfileThread():
 def flashImageThread():
   Thread(target = flashImage).start()
 
+def backupEEPROMThread():
+  Thread(target = backupEEPROM).start()
+  
+def restoreEEPROMThread():
+  Thread(target = restoreEEPROM).start()
+
+def eraseEEPROMThread():
+  Thread(target = eraseEEPROM).start()
+  
 ## events ##
 
 def OnResize(event):
@@ -395,8 +432,8 @@ def ExitAppHotKey(event):
 ## create form and widgets ##
 
 root = Tk()
-root.geometry("640x400")
-root.title(title + " v1.03")
+root.geometry("700x400")
+root.title(title + " v1.04")
 try:
   root.iconbitmap("icon.ico")
 except:
@@ -438,11 +475,17 @@ mainmenu = Menu(root)
 filemenu = Menu(mainmenu, tearoff=0)
 filemenu.add_command(label = "Select Hex file", underline = 1, accelerator = "Ctrl + H", command = selectHexFile)
 filemenu.add_command(label = "Select Flash image", underline = 1, accelerator = "Ctrl + F", command = selectFlashFile)
+if not fxActivator:
+  filemenu.add_separator()
+  filemenu.add_command(label = "Backup EEPROM", underline = 1, accelerator = "Ctrl + B", command = backupEEPROMThread)
+  filemenu.add_command(label = "Restore EEPROM", underline = 1, accelerator = "Ctrl + R", command = restoreEEPROMThread)
+  filemenu.add_command(label = "Erase EEPROM", underline = 1, command = eraseEEPROMThread)
+  filemenu.add_separator()
 filemenu.add_command(label = "Exit", underline = 1, accelerator = "Ctrl + X", command = root.quit)
 optionmenu = Menu(mainmenu, tearoff = 0)
 optionmenu.add_checkbutton(label="Verify Hex file after upload",onvalue=True,offvalue=False,variable=appVerify)
 appVerify.set(True)
-optionmenu.add_checkbutton(label="Upload Flash image with verify",onvalue=True,offvalue=False,variable=flashVerify)
+optionmenu.add_checkbutton(label="Upload Flash image without verify",onvalue=False,offvalue=True,variable=flashVerify)
 #flashVerify.set(True)
 optionmenu.add_command(label="Clear log",command=ClearLog)
 mainmenu.add_cascade(label="File", menu = filemenu)
@@ -451,9 +494,9 @@ root.config(menu=mainmenu)
 
 # default log
 if fxActivator:
-  addLog("\nArduboy FX activator v1.03 April 2020 by Mr.Blinky.\n\nInstructions:\n-------------\n1) Connect Arduboy and turn power on.\n2) Click Upload Hex file button and wait for upload to complete.\n3) Run Flash mod chip option on Arduboy.\n4) Run Flash bootloader option on Arduboy.\n5) Click Upload Flash image button and wait for upload to complete.\n6) Enjoy your Arduboy FX.\n")
+  addLog("\nArduboy FX activator v1.04 Apr-Aug 2020 by Mr.Blinky.\n\nInstructions:\n-------------\n1) Connect Arduboy and turn power on.\n2) Click Upload Hex file button and wait for upload to complete.\n3) Run Flash mod chip option on Arduboy.\n4) Run Flash bootloader option on Arduboy.\n5) Click Upload Flash image button and wait for upload to complete.\n6) Enjoy your Arduboy FX.\n")
 else:
-  addLog("\nArduboy uploader GUI v1.03 April 2020 by Mr.Blinky.\n\n1) Use File menu or […] button to browse for a Hex file or Flash image.\n2) Press the appropriate upload button to upload the file.")
+  addLog("\nArduboy uploader GUI v1.04 Apr-Aug 2020 by Mr.Blinky.\n\n1) Use File menu or […] button to browse for a Hex file or Flash image.\n2) Press the appropriate upload button to upload the file.\n")
 log.pack(side="top", expand=True, fill='both')
 log.bind("<Configure>", OnResize)
 
