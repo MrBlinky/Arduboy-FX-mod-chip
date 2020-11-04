@@ -1,5 +1,5 @@
 /*******************************************************************************
-Arduboy ModChip loader v1.2 (Arduboy part) Dec 2019 -Aug 2020 by Mr.Blinky
+Arduboy ModChip loader v1.4 (Arduboy part) Dec 2019 -Aug 2020 by Mr.Blinky
 
 Arduboy program to program the modchips attiny firmware
 
@@ -171,7 +171,11 @@ void flashModchip()
       {
         if (ISP_enable())
         {
-          if (ISP_verifyProgramFlash(powerUpGame ? FIRMWARE_GAME : FIRMWARE_MENU)) flashingState++;
+          if (ISP_verifyProgramFlash(powerUpGame ? FIRMWARE_GAME : FIRMWARE_MENU))
+          {
+            ISP_writeEEPROM_00(0xBC);
+            flashingState++;
+          }
           ISP_disable();
         }
       ++flashingState;
@@ -237,11 +241,13 @@ void flashBootloader()
     if (flashingState == 2)
     {
       if (ISP_enable())
-      {
-        ISP_writeEEPROM_00(0xFB); // Flash Bootloader command
-        ISP_disable();
-        arduboy.delayShort(500); // wait for mod chip to kick in and reset Arduboy
-      }
+        if (ISP_readEEPROM_00() == 0xBC)
+        {
+          ISP_writeEEPROM_00(0xFB); // Flash Bootloader command
+          ISP_disable();
+          arduboy.delayShort(500); // wait for mod chip to kick in and reset Arduboy
+        }
+        else ISP_disable();
     }
     ++flashingState;
   }

@@ -60,9 +60,9 @@ bool ISP_enable()
          (0 << DORD) | // MSB first
          (1 << MSTR) | // Enabe, Master mode
          (0 << CPOL) | (0 << CPHA) | // Mode 0
-         (1 << SPR1) | (1 << SPR0);  // IOCLK/64 = 250KHz
+         (1 << SPR1) | (1 << SPR0);  // IOCLK/128 = 125KHz
   SPSR_old = SPSR;
-  SPSR = (1 <<SPI2X);
+  SPSR = (0 <<SPI2X);
   for (uint8_t retries = 0; retries < 10; retries++)
   {
     ISP_RESET_PORT |= _BV(ISP_RESET_BIT); // inactive high
