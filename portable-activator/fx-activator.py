@@ -269,7 +269,7 @@ def uploadHexfile():
   if bootloader.read(2) == b"10" : #original caterina 1.0 bootloader
     bootloader.write(b"r") #read lock bits
     if (ord(bootloader.read(1)) & 0x10 != 0) and caterina_overwrite :
-      addLogRed("This upload will most likely corrupt the catarina bootloader. Upload aborted.")
+      addLogRed("This upload will most likely corrupt the Catarina bootloader. Upload aborted.")
       bootloaderExit()
       enableButtons()
       return
@@ -414,7 +414,8 @@ def flashImage():
   #bootloaderExit()  # Exit bootloader menu and start sketch
   addLogGreen("\nUploaded flash image successfully!!\n")
   if not fxFlasher:
-    addLog("Press LEFT or RIGHT on Arduboy to browse through the game catagogories.")
+    addLog("It is now safe to switch off your Arduboy, or try the new features:")
+    addLog("Press LEFT or RIGHT on Arduboy to browse through the game categories.")
     addLog("Press UP or DOWN to select a game followed by A or B to load and play a game.")
     addLog("Press A or B on the Loader title screen to play last loaded game.")
   enableButtons()
