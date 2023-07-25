@@ -23,14 +23,14 @@ It also contains an all in-one zip file targeted for Windows users that contains
 Windows users can unpack the zip file and double click the **run-fx-activator-windows.bat** to run the tool. Linux and macOS users can run the **fx-activator.py** using Python launcher.
 For Linux and macOS users: Make sure PySerial module is installed otherwise the tool won't work.
 
-![screenshot](https://github.com/MrBlinky/Arduboy-FX-mod-chip/raw/master/portable-activator/screenshot-running.png)
+![screenshot](portable-activator/screenshot-running.png)
 
 
 ### How to - Arduboy part
 
 The status of the mod-chip is displayed on the title screen. If correctly installed you will see a `✓` checkmark after both the flash chip and mod-chip. If you see a `✗` after either chip, the mod-chip is not functioning properly and you should inspect the mod-chip for shorts or bad solder joints. Before starting any flashing process, make sure Arduboy is fully charged or connected to USB.
 
-![titlescreen](https://github.com/MrBlinky/Arduboy-FX-mod-chip/raw/master/portable-activator/fx-activator-titlescreen.png)
+![titlescreen](portable-activator/fx-activator-titlescreen.png)
 
 Pressing the A-button on the title screen will show the menu. There are 4 options to choose from:
 - Diagnostic Info
@@ -50,4 +50,4 @@ The flash bootloader option will instruct the mod-chip MCU to flash Arduboy boot
 
 After the bootloader is updated the flash image can be uploaded using the GUI tool.
 
-![menu](https://github.com/MrBlinky/Arduboy-FX-mod-chip/raw/master/portable-activator/fx-activator-menu.png)
+![menu](portable-activator/fx-activator-menu.png)
